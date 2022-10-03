@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLACIER SAVING</title>
+    <link rel="shortcut icon" href="./images/sublogo.png" type="image/x-icon" />
+    <style>
+        
+        @font-face {
+            src: url(./fonts/AsusRog-Regular.ttf);
+            font-family: ROG Fonts;
+        }
+        html,
+        body{
+            position: relative;
+            width: 100%;
+            height:100%;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            background:url(../img/ekaterina-sazonova-eAZOKkEhzDg-unsplash.jpg);
+            background-size: 100% 100%;
+        }
+        body::-webkit-scrollbar{display: none;}
+        .title{
+            position: absolute;
+            width: 50%;
+            height: 3rem;
+            left: -1rem;
+            top: 30%;
+            font-family: ROG Fonts;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 2rem;
+            line-height: 29px;
+
+            color: #FFFFFF;
+
+            text-shadow: 0px 0px 20px rgba(196, 196, 196, 0.35);
+            transform: rotate(-90deg);
+        }
+        .subtitle{
+            position: absolute;
+            width: 16rem;
+            height: 1.5rem;
+            left: 24.3rem;
+            top: 7rem;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 16px;
+
+            color: #FFFFFF;
+
+            text-shadow: 0px 0px 50px rgba(97, 135, 209, 0.79);
+
+        }
+        .text{
+            position: absolute;
+            width: 13rem;
+            height: 20rem;
+            right: 8rem;
+            bottom: -5rem;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 1rem;
+            line-height: 1.2rem;
+
+            color: #FFFFFF;
+        }
+        .logo{
+            position: absolute;
+            width: 87px;
+            height: 77.61px;
+            left: 25px;
+            top: 15px;
+        }
+        .slidershow{
+            width: 50%;
+            height: 70%;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0px 4px 20px 5px rgba(0, 0, 0, 0.25);
+        }
+        .middle{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .navigation{
+            position: absolute;
+            bottom: 0;
+            left:42%;
+            /* transform: translate(-50%) rotate(90deg); */
+            display: flex;
+        }
+        .bar{
+            width:0.5vw;
+            height: 0.5vw;
+            border: 2px solid #fff;
+            margin:3vh;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        input[name="r"]{
+            position: absolute;
+            visibility: hidden;
+        }
+        .bar:hover{
+            background: #fff;
+        }
+        .slides{
+            width: 500%;
+            height: 100%;
+            display: flex;
+        }
+        .slide{
+            width: 20%;
+            transition: 0.6s;
+        }
+        .slide img{
+
+            height: 100%;
+        }
+        #r1:checked ~ .s1{
+            margin-left: 0;
+        }
+        #r2:checked ~ .s1{
+            margin-left: -20%;
+        }
+        #r3:checked ~ .s1{
+            margin-left: -40%;
+        }
+        #r4:checked ~ .s1{
+            margin-left: -60%;
+        }
+    </style>
+</head>
+<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/before-after-slider@1.0.1/dist/slider.bundle.js"></script>
+    <a href="nav.html">
+        <img class = "logo" src="../img/logo.png">  
+    </a>
+    <div class="title">Glacier Repeat Photos</div>
+    <div class="subtitle">Grinnell Glacier 1910 and 2016</div>
+    <p class="text">
+        In 1910, Morton Elrod documented how Grinnell Glacier’s mass filled the basin and how the glacier was then joined with the ice apron we now call the Salamander (right). Close inspection of Gem Glacier (top-center) reveals a loss of thickness and volume over the years as well. 
+    </p>
+    <div class="slidershow middle">
+        <div class="slides">
+            <input type="radio" name = "r" id="r1" checked>
+            <input type="radio" name = "r" id="r2">
+            <input type="radio" name = "r" id="r3">
+            <input type="radio" name = "r" id="r4">
+            <div class= "slide s1">
+                <script>
+                    // window.onload = function() {
+                      new SliderBar({
+                        el: ".s1",
+                        beforeImg: '../img/1.jpg',
+                        afterImg: '../img/2.jpg'
+                      });
+                    // }
+                  </script>
+            </div>
+            <div class= "slide s2">
+                <script>
+                    // window.onload = function() {
+                      new SliderBar({
+                        el: ".s2",
+                        beforeImg: '../img/3.jpg',
+                        afterImg: '../img/4.jpg'
+                      });
+                    // }
+                  </script>
+            </div>
+            <div class= "slide s3">
+                <script>
+                    // window.onload = function() {
+                      new SliderBar({
+                        el: ".s3",
+                        beforeImg: '../img/6.jpg',
+                        afterImg: '../img/5.jpg'
+                      });
+                    // }
+                  </script>
+            </div>
+            <div class= "slide s4">
+                <script>
+                    // window.onload = function() {
+                      new SliderBar({
+                        el: ".s4",
+                        beforeImg: '../img/7.jpg',
+                        afterImg: '../img/8.jpg'
+                      });
+                    // }
+                  </script>
+            </div>
+        </div>
+    </div>
+    <div class="navigation">
+        <label for="r1" class="bar"></label>
+        <label for="r2" class="bar"></label>
+        <label for="r3" class="bar"></label>
+        <label for="r4" class="bar"></label>
+    </div>
+</body>
+</html>
