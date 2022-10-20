@@ -20,13 +20,6 @@ function planet(x,y,r=30){
       let ang = noise(i,frameCount/800+mouseX/1000,500)*10*PI
       let rr = noise(i,500,frameCount/50+mouseY/500)*30*(15/(sqrt(xx)+1))
       ellipse(xx*cos(ang),xx*sin(ang),rr)
-  
-      let cc2 = colorsRed[int(noise(frameCount/10,i)*colorsBlue.length)%colorsBlue.length]
-      fill(cc2)
-  
-      drawingContext.shadowColor = color(cc2);
-      drawingContext.shadowBlur =10;
-      ellipse(xx*cos(ang*2),xx*sin(ang*2),rr/2)
         
       if (lastX && random()<0.1){
         push()
@@ -49,21 +42,40 @@ function planet(x,y,r=30){
     }
   pop()
 }
-function star(x, y, radius1, radius2, npoints) {
-  let angle = TWO_PI / npoints;
-  let halfAngle = angle / 2.0;
-  beginShape();
-  for (let a = 0; a < TWO_PI; a += angle) {
-    let sx = x + cos(a) * radius2;
-    let sy = y + sin(a) * radius2;
-    vertex(sx, sy);
-    sx = x + cos(a + halfAngle) * radius1;
-    sy = y + sin(a + halfAngle) * radius1;
-    vertex(sx, sy);
-  }
-  endShape(CLOSE);
-  x = cos(frameCount * 100)
+function redParticles(x,y,r=30){
+  push()
+    translate(x,y)
+    for(var i=0;i<200;i++){
+      let xx = noise(i*2,frameCount/100+mouseX/500)*r*noise(i)*2 
+      let ang = noise(i,frameCount/800+mouseX/1000,500)*10*PI
+      let rr = noise(i,500,frameCount/50+mouseY/500)*30*(15/(sqrt(xx)+1))
+      ellipse(xx*cos(ang),xx*sin(ang),rr)
+
+      let cc2 = colorsRed[int(noise(frameCount/10,i)*colorsBlue.length)%colorsBlue.length]
+      fill(cc2)
+      
+      drawingContext.shadowColor = color(cc2)
+      drawingContext.shadowBlur =10
+      ellipse(xx*cos(ang*2),xx*sin(ang*2),rr/2)  
+    }
+  pop()
 }
+
+// function star(x, y, radius1, radius2, npoints) {
+//   let angle = TWO_PI / npoints;
+//   let halfAngle = angle / 2.0;
+//   beginShape();
+//   for (let a = 0; a < TWO_PI; a += angle) {
+//     let sx = x + cos(a) * radius2;
+//     let sy = y + sin(a) * radius2;
+//     vertex(sx, sy);
+//     sx = x + cos(a + halfAngle) * radius1;
+//     sy = y + sin(a + halfAngle) * radius1;
+//     vertex(sx, sy);
+//   }
+//   endShape(CLOSE);
+//   x = cos(frameCount * 100)
+// }
 
 function setup() {
   createCanvas(800, 800)
@@ -78,11 +90,8 @@ function draw() {
   blendMode(SCREEN)
   planet(width/2, height/2, 400) 
 
-  fill('#FCDE9C')
+  if(frameCount>50){
+    redParticles(width/2, height/2, 500)
+  }
 
-  // push()
-  // translate(width * 0.8, height * 0.5)
-  // rotate(frameCount / -100.0)
-  // star(0, 0, 20, 7, 4)
-  // pop()
 }
