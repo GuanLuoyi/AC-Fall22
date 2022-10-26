@@ -45,13 +45,15 @@ function planet(x,y,r=30){
 function redParticles(x,y,r=30){
   push()
     translate(x,y)
-    for(var i=0;i<200;i++){
+    for(var i=0;i<100;i++){
       let xx = noise(i*2,frameCount/100+mouseX/500)*r*noise(i)*2 
       let ang = noise(i,frameCount/800+mouseX/1000,500)*10*PI
       let rr = noise(i,500,frameCount/50+mouseY/500)*30*(15/(sqrt(xx)+1))
       ellipse(xx*cos(ang),xx*sin(ang),rr)
 
-      let cc2 = colorsRed[int(noise(frameCount/10,i)*colorsBlue.length)%colorsBlue.length]
+      let cc2 = color(colorsRed[int(noise(frameCount/10,i)*colorsBlue.length)%colorsBlue.length])
+      cc2.setAlpha(frameCount * 0.3)
+      
       fill(cc2)
       
       drawingContext.shadowColor = color(cc2)
