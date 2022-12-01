@@ -5,65 +5,94 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .code{
+        margin: 0 0 0 40px;
+      }
+      pre {
+        font-family:'Monotype.com', Courier New, monospace;
+        font-size:  1.2em;
+        margin-top: 20px;
+        background-color: #EAEBEB;
+      }
+    </style>
 </head>
 <body>
-    <h1>Video</h1>
-    <embed src="/LEDVideo.mp4" height="600" width="800">
+    <div class = "video">
+      <h1>Video</h1>
+      <embed src="../img/LEDVideo.mp4" height="600" width="800">
+    </div>
+
+    <div class="code">
     <h1>Code</h1>
     <pre>
-        #include <FastLED.h>
 
-        #define LEDpin 12
-        #define NUM_LEDS 24
-        #define LED_TYPE WS2812
-        #define COLOR_ORDER GRB
+
+      #include &lt;FastLED.h&gt;
+
+      #define LEDpin 12
+      #define NUM_LEDS 24
+      #define LED_TYPE WS2812
+      #define COLOR_ORDER GRB
+      
+      #define Apin 13
+      #define ANALOG A0
+      int x = 0;
+      uint8_t max_bright = 128;
+      CRGB leds[NUM_LEDS];
+      
+      void setup(){
+        Serial.begin(115200);
+        pinMode(A0, INPUT);
+        pinMode(Apin, OUTPUT);
+        LEDS.addLeds&lt;LED_TYPE,LEDpin,COLOR_ORDER&gt;(leds,NUM_LEDS);
+        FastLED.setBrightness(max_bright);
+      }
+      
+      int loop_index = 1;
+      
+      void loop(){
+        digitalWrite(Apin, HIGH);
+        x = digitalRead(ANALOG);
+        Serial.println(x);
         
-        #define Apin 13
-        #define ANALOG A0
-        int x = 0;
-        uint8_t max_bright = 128;
-        CRGB leds[NUM_LEDS];
-        
-        void setup(){
-          Serial.begin(115200);
-          pinMode(A0, INPUT);
-          pinMode(Apin, OUTPUT);
-          LEDS.addLeds<LED_TYPE,LEDpin,COLOR_ORDER>(leds,NUM_LEDS);
-          FastLED.setBrightness(max_bright);
-        }
-        
-        int loop_index = 1;
-        
-        void loop(){
-          digitalWrite(Apin, HIGH);
-          x = digitalRead(ANALOG);
-          Serial.println(x);
-         
-          if(x == 1){
-            fill_gradient(leds, 0, CHSV(50, 255,255) , NUM_LEDS, CHSV(150,255,255), LONGEST_HUES);
-            //shutdown led before index
-            for(int i=0; i<loop_index - 3; i++){
-              leds[i] = CRGB::Black;
-            }
-            if(loop_index < NUM_LEDS){
-              for(int j=loop_index; j<NUM_LEDS; j++){
-                leds[j] = CRGB::Black;
-              }
-            }
-            loop_index++;
-          }else{
-            loop_index = 1;
-            for(int i=0; i<NUM_LEDS; i++){
-              leds[i] = CRGB::Black;
+        if(x == 1){
+          fill_gradient(leds, 0, CHSV(50, 255,255) , NUM_LEDS, CHSV(150,255,255), LONGEST_HUES); 
+          //shutdown led before index
+          for(int i=0; i&lt;loop_index - 3; i++){
+            leds[i] = CRGB::Black;
+          }
+      
+          //shutdown led after index
+          if(loop_index &lt; NUM_LEDS){
+            for(int j=loop_index; j&lt;NUM_LEDS; j++){
+              leds[j] = CRGB::Black;
             }
           }
-          FastLED.show();
-          delay(300);
-         
-          if(loop_index >= NUM_LEDS){
-            loop_index = 1;
+          loop_index++;
+        }else{
+          loop_index = 1;
+          for(int i=0; i&lt;NUM_LEDS; i++){
+            leds[i] = CRGB::Black;
           }
         }
-        </pre>
+        FastLED.show();
+        delay(300);
+        
+        if(loop_index &gt;= NUM_LEDS){
+          loop_index = 1;
+        }
+      }
+
+      
+    </pre>
+  </div>
 </body>
 </html>
