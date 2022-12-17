@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .code{
+        margin: 0 0 0 40px;
+      }
+      pre {
+        font-family:'Monotype.com', Courier New, monospace;
+        font-size:  0.8em;
+        margin-top: 20px;
+        background-color: #EAEBEB;
+      }
+    </style>
+</head>
+<body>
+    <h1>Device</h1>
+    <img src="./device.jpg" height="600" width="800">
+    <h1>Multi-channel Controller</h1>
+    <embed src="./muti-channel controller.mp4" height="600" width="800">
+    <h1>Multi-channel Music Controller</h1>
+    <embed src="./music.mp4" height="600" width="800">
+
+    <div class="code">
+    <h1>Code</h1>
+    <pre>
+
+
+        import processing.serial.*;
+        import processing.sound.*;
+        //from https://pages.mtu.edu/~suits/notefreqs.html
+        //                C4      C#4      D4      D#4    E4      F4      F#4      G4      G#4    A4      A#4     B4      C5
+        float[] notes = {261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 369.99, 392.00, 415.30, 440.0, 466.16, 493.88, 523.25};
+        
+        // Envelope parameters
+        Env env;
+        float attackTime = 0.001;
+        float sustainTime = 0.004;
+        float sustainLevel = 0.3;
+        float releaseTime = 2.4;
+        
+        //Sine wave oscillator
+        SinOsc sineWave;
+        //Square wave oscillator
+        SqrOsc sqrWave;
+        
+        //Low pass filter
+        LowPass lowPass;
+        float LPfreq=2500;
+        
+        //For the visuals
+        ArrayList<PVector> points = new ArrayList<PVector>();
+        Serial myConnection;
+        float diameter = 0;
+        Boolean bkg = true;
+        Boolean fillC = true;
+        Boolean Rec = false;
+        Boolean changeAllowed1 = true;
+        Boolean changeAllowed2 = true;
+        Boolean changeAllowed3 = true;
+        int r,g,b;
+        void setup(){
+          size(500,500);
+          
+          printArray(Serial.list());
+          myConnection = new Serial(this, Serial.list()[0],9600);
+          myConnection.bufferUntil('\n');
+          sineWave = new SinOsc(this);
+          sqrWave = new SqrOsc(this);
+          
+          env  = new Env(this);
+          
+          lowPass = new LowPass(this);
+          lowPass.process(sqrWave);
+          
+          
+          colorMode(HSB, TWO_PI, 1, 1, 1);
+        }
+        
+        void draw(){
+          if (!bkg){
+           background(0);
+         }else{
+           background(255);
+         }
+         if(!fillC){
+           fill(255,0,0);
+         }else{
+           r = (int)random(255);
+           g = (int)random(255);
+           b = (int)random(255);
+           fill(r,g,b);
+         }
+         
+         if(Rec){
+           rect(width/2-diameter/2,height/2-diameter/2,diameter,diameter);
+         }else{
+           circle(width/2,height/2,diameter);
+         }
+        }
+        void playNote(float noteFreq) {
+          sineWave.play(noteFreq, 0.75);
+          env.play(sineWave, attackTime, sustainTime, sustainLevel, releaseTime);
+          sqrWave.play(noteFreq, 0.75);
+          env.play(sqrWave, attackTime, sustainTime, sustainLevel, releaseTime);
+        }
+        
+        void serialEvent(Serial conn){
+          String incomingValue = conn.readString();
+          println(incomingValue);
+          
+          String[] values = split(trim(incomingValue), ',');
+          printArray(values);
+          if (values.length == 4){
+            diameter = map(float(values[2]), 0, 4095, 100, width);
+            println(values[2]);
+            println(diameter);
+            //bkg = float(values[0]);
+            
+            if(float(values[0]) == 1 && changeAllowed1){
+              bkg = !bkg;
+              changeAllowed1 = false;
+            }
+            
+            if(float(values[0]) == 0 && !changeAllowed1){
+              changeAllowed1 = true;
+            }
+            
+            if(float(values[1]) == 1 && changeAllowed2){
+              fillC = !fillC;
+              changeAllowed2 = false;
+            }
+            
+            if(float(values[1]) == 0 && !changeAllowed2){
+              changeAllowed2 = true;
+            }
+            
+            if(float(values[3]) <=1000 && changeAllowed3){
+              Rec = !Rec;
+              changeAllowed3 = false;
+            }
+            
+            if(float(values[3]) >=1000 && !changeAllowed3){
+              changeAllowed3 = true;
+            }
+            LPfreq = map(float(values[2]), 0, 4095, 5000, 100);
+            
+            if(float(values[0]) == 0 && float(values[1])==1){
+              playNote(notes[1]);
+            }
+            if(float(values[0]) == 1 && float(values[1])==0){
+              playNote(notes[2]);
+            }
+            if(float(values[0]) == 1 && float(values[1])==1){
+              playNote(notes[3]);
+            }
+            
+            if(float(values[3])<=500 && float(values[3])>=200){
+              playNote(notes[4]);
+            }else if(float(values[3])<=1000 && float(values[3])>500){
+              playNote(notes[5]);
+            }else if(float(values[3])<=1500 && float(values[3])>1000){
+              playNote(notes[6]);
+            }else if(float(values[3])<=2500 && float(values[3])>1500){
+              playNote(notes[7]);
+            }else if(float(values[3])<=3500 && float(values[3])>2500){
+              playNote(notes[8]);
+            }else if(float(values[3])>3500){
+              playNote(notes[9]);
+            }
+          }
+        }
+
+
+    </pre>
+  </div>
+</body>
+</html>
